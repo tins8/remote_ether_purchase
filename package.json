@@ -1,0 +1,23 @@
+{
+  "name": "shell",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "react-redux": "^5.0.6",
+    "react-scripts": "1.0.10",
+    "redux": "^3.7.2",
+    "web3": "^1.0.0-beta.35"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "deploy": "npm run build&&aws s3 cp build/ s3://xxxxxxxxxx --recursive",
+    "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "tachyons": "^4.10.0"
+  }
+}
