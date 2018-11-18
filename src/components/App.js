@@ -45,16 +45,18 @@ class App extends React.Component {
     this.getWalletBalance();
     this.validLocalAddress = false;
 
-    window.addEventListener('load', () => {
-      let web3 = window.web3;
-      
-      if (typeof web3 !== 'undefined') {
-        web3 = new Web3(web3.currentProvider);
-          const localAddress = web3.utils.hexToNumberString(web3.currentProvider.publicConfigStore._state.selectedAddress);
-          const remoteAddress = web3.utils.hexToNumberString(PROD_ADDRESS);
-          if (localAddress === remoteAddress) {
-            this.validLocalAddress = true;
-          }
+    window.addEventListener('load', async () => {
+      if(window.ethereum) {
+        let ethereum = window.ethereum;
+        try {
+          await ethereum.enable();
+          this.compareAddresses();
+        } catch (error) {
+          console.log('ERROR');
+        }
+      }
+      else if (window.web3) {
+        this.compareAddresses();
       }
     });
   }
@@ -63,6 +65,16 @@ class App extends React.Component {
     this.clearInterval(this.showDate);
     this.clearInterval(this.showPrices);
     this.clearInterval(this.updateHistoric);
+  }
+
+  compareAddresses() {
+    let web3 = window.web3;
+    web3 = new Web3(web3.currentProvider);
+    const localAddress = web3.utils.hexToNumberString(web3.currentProvider.publicConfigStore._state.selectedAddress);
+    const remoteAddress = web3.utils.hexToNumberString(PROD_ADDRESS);
+    if (localAddress === remoteAddress) {
+      this.validLocalAddress = true;
+    }
   }
 
   dateTick() {
