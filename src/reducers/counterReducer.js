@@ -2,8 +2,9 @@ import * as actionType from '../actions/ActionType';
 
 const counterReducer = (state = 0, action) => {
   switch (action.type) {
-    case actionType.ADD_COUNTER:
+    case actionType.HANDLE_REFRESH:
       return state + action.payload;
+
     default:
       return state
   }

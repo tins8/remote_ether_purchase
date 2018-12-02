@@ -1,24 +1,29 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addCounter } from '../actions';
+import { handleRefresh } from '../actions';
 import { bindActionCreators } from 'redux';
 
-class AddCounter extends Component {  
+class HandleRefresh extends Component {
+   constructor(props) {
+    super(props);
+   }
+
    render() {
      return (
         <div className="pv3">
           <div className="f6 link dim br3 ph3 pv2 mb0 dib white bg-dark-blue pointer" 
             onClick={(e) => {
               e.preventDefault();
-              this.props.dispatch(addCounter());
+              this.props.func();
+              this.props.dispatch(handleRefresh());
             }}
-          >Add</div>
+          >Refresh</div>
       </div>
      )
    }
    mapDispatchToProps = (dispatch) => {
-    return { actions: bindActionCreators(addCounter, dispatch) }
+    return { actions: bindActionCreators(handleRefresh, dispatch) }
   }
 }
 
-export default connect(this.mapDispatchToProps)(AddCounter);
+export default connect(this.mapDispatchToProps)(HandleRefresh);

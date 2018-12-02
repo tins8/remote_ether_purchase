@@ -8,10 +8,9 @@ import {
   ONE_SECOND, ONE_MINUTE, TWO_MINUTES  
 } from '../utils/data.js';
 import { Slot } from './Slot';
-import Counter from '../containers/Counter';
-import AddCounter from '../containers/AddCounter';
+import HandleRefresh from '../containers/HandleRefresh';
 import { connect } from 'react-redux';
-import { addCounter } from '../actions';
+import { handleRefresh } from '../actions';
 import { bindActionCreators } from 'redux';
 
 const Web3 = require('web3');
@@ -33,7 +32,7 @@ class App extends React.Component {
       timeSet: [],
     };
 
-    this.props.dispatch(addCounter());
+    this.props.dispatch(handleRefresh());
   }
   
   componentDidMount() {
@@ -167,7 +166,7 @@ class App extends React.Component {
   }
 
   mapDispatchToProps = (dispatch) => {
-    return { actions: bindActionCreators(addCounter, dispatch) }
+    return { actions: bindActionCreators(handleRefresh, dispatch) }
   }
 
   render() {
@@ -177,8 +176,6 @@ class App extends React.Component {
         <div className="bg-white blue tl mt1 ph2 pv2">
           <div className="fw7 f3 mt3 mb0">
             Ethereum {this.topVal}
-            <Counter></Counter><br />
-            <AddCounter></AddCounter>
           </div>
         </div>
         <div className="cf ph1-ns">
@@ -192,6 +189,7 @@ class App extends React.Component {
           <Slot label="Volume" data={this.volumeMap} />
           <Slot label="Time" data={this.timeMap} />
         </div>
+        <HandleRefresh func={this.handleRefresh}></HandleRefresh>
         <div className="pv3">
           <div className="f6 link dim br3 ph3 pv2 mb2 dib white bg-dark-blue pointer" onClick={this.handleRefresh}>
             Refresh Price

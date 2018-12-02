@@ -1,1 +1,2 @@
 export const ADD_COUNTER = 'ADD_COUNTER';
+export const HANDLE_REFRESH = 'HANDLE_REFRESH';
