@@ -1,1 +1,1 @@
-export const ADD_COUNTER = 'ADD_COUNTER';
+export const SHOW_PRICE = 'SHOW_PRICE';

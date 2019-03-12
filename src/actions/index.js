@@ -1,6 +1,6 @@
 import * as actionType from './ActionType';
 
-export const addCounter = () => ({
-  type: actionType.ADD_COUNTER,
-  payload: 10
+export const showPrice = (f) => ({
+  type: actionType.SHOW_PRICE,
+  payload: f
 });

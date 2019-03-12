@@ -3,16 +3,14 @@ import React from 'react';
 import Tachyons from 'tachyons/css/tachyons.min.css';
 import '../css/App.css';
 import { 
-  getBTC, getETH, getBalance, getHistoric, 
+  getETH, getBalance, getHistoric, 
   extractPriceFields, buyETH, PROD_ADDRESS,
   ONE_SECOND, ONE_MINUTE, TWO_MINUTES  
 } from '../utils/data.js';
 import { Slot } from './Slot';
-import Counter from '../containers/Counter';
-import AddCounter from '../containers/AddCounter';
+import Price from '../containers/Price';
+import PriceDisplay from '../containers/PriceDisplay';
 import { connect } from 'react-redux';
-import { addCounter } from '../actions';
-import { bindActionCreators } from 'redux';
 
 const Web3 = require('web3');
 
@@ -32,8 +30,6 @@ class App extends React.Component {
       buySignal: false,
       timeSet: [],
     };
-
-    this.props.dispatch(addCounter());
   }
   
   componentDidMount() {
@@ -45,18 +41,16 @@ class App extends React.Component {
     this.getWalletBalance();
     this.validLocalAddress = false;
 
-    window.addEventListener('load', async () => {
-      if(window.ethereum) {
-        let ethereum = window.ethereum;
-        try {
-          await ethereum.enable();
-          this.compareAddresses();
-        } catch (error) {
-          console.log('ERROR');
-        }
-      }
-      else if (window.web3) {
-        this.compareAddresses();
+    window.addEventListener('load', () => {
+      let web3 = window.web3;
+      
+      if (typeof web3 !== 'undefined') {
+        web3 = new Web3(web3.currentProvider);
+          const localAddress = web3.utils.hexToNumberString(web3.currentProvider.publicConfigStore._state.selectedAddress);
+          const remoteAddress = web3.utils.hexToNumberString(PROD_ADDRESS);
+          if (localAddress === remoteAddress) {
+            this.validLocalAddress = true;
+          }
       }
     });
   }
@@ -79,15 +73,9 @@ class App extends React.Component {
 
   dateTick() {
     this.setState({date: new Date()});
-    // store.dispatch({type: 'INCREMENT'});
-    // this.topVal = store.getState();
   }
 
   pricesTick() {
-    getBTC()
-    .then( p => {
-      this.setState({btc: parseFloat(p.response)});
-    });
     getETH()
     .then( p => {
       this.setState({eth: parseFloat(p.response)});
@@ -165,27 +153,21 @@ class App extends React.Component {
        });
    });
   }
-
-  mapDispatchToProps = (dispatch) => {
-    return { actions: bindActionCreators(addCounter, dispatch) }
-  }
-
+  
   render() {
     this.setDataMaps();
     return (
       <div className="mw9 center ph3-ns mv0">
         <div className="bg-white blue tl mt1 ph2 pv2">
           <div className="fw7 f3 mt3 mb0">
-            Ethereum {this.topVal}
-            <Counter></Counter><br />
-            <AddCounter></AddCounter>
+            ETH Price Movement {this.topVal}
+            <Price></Price><br />
+            <PriceDisplay refresh={this.handleRefresh} eth={this.state.eth}></PriceDisplay>
           </div>
         </div>
         <div className="cf ph1-ns">
           {/* TIME & PRICES  */}
           <Slot display={this.state.date.toLocaleTimeString('EN-US')} />
-          <Slot display={this.state.btc} label="BTC: $" />
-          <Slot display={this.state.eth} label="ETH: $" />
         </div>
         <div className="cf ph1-ns">
           <Slot label="Price" data={this.closeMap} />

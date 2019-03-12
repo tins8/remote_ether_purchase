@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-class Counter extends Component {  
+class Price extends Component {  
   render(){
     return (
       <div className="cf ph1-ns">
-        {this.props.count}
+        {this.props.price}
       </div>
     )
   }
 }
 function mapStateToProps(state){
   return {
-    count: state.counterReducer,
+    price: state.priceReducer,
   };
 }
-export default connect(mapStateToProps)(Counter);
+export default connect(mapStateToProps)(Price);
